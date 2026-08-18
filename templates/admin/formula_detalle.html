@@ -1,0 +1,223 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}{{ formula.nombre }}{% endblock %}
+
+{% block content %}
+
+<div class="admin-page-header">
+  <div>
+    <a href="{{ url_for('admin.formulas') }}" class="back-link">← Fórmulas</a>
+    <h1 style="margin-top:.25rem">{{ formula.nombre }}</h1>
+  </div>
+  <a href="{{ url_for('admin.formula_editar', id=formula.id) }}" class="btn-action btn-action-ghost">
+    Editar configuración
+  </a>
+</div>
+
+<div class="fml-config-bar">
+  <span>Amort. <strong>{{ formula.amort_pct|float|int }}%</strong></span>
+  <span>Reserva inflación <strong>{{ formula.reserva_pct|float|int }}%</strong></span>
+  <span>Margen <strong>{{ formula.margen_pct|float|int }}%</strong></span>
+  <span>MercadoPago <strong>+{{ formula.mp_comision_pct|float|int }}%</strong></span>
+  <span>Desc. efectivo <strong>-{{ formula.descuento_pct|float|int }}%</strong></span>
+</div>
+
+<div class="fml-layout">
+
+  {# ---- GRILLA ---- #}
+  <div class="fml-builder">
+    <div class="fml-section">
+
+      <table class="fml-table fml-zebra">
+        <thead>
+          <tr>
+            <th style="width:40%">Ítem</th>
+            <th>Cantidad</th>
+            <th>Precio/u</th>
+            <th>Costo</th>
+            <th style="width:36px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in c.lineas %}
+          <tr>
+            <td>
+              <span class="fml-item-nombre">{{ item.nombre }}</span>
+              {% if item.l.tipo == 'mano_obra' %}
+              <span class="fml-item-tag fml-tag-mo">mano de obra</span>
+              {% endif %}
+            </td>
+            <td style="font-family:system-ui">
+              {{ item.l.cantidad|float|int if item.l.cantidad|float == item.l.cantidad|float|int else item.l.cantidad|float }}
+              {{ item.unidad }}
+            </td>
+            <td style="font-family:system-ui;color:#888">
+              {% if item.precio_u %}{{ item.precio_u|peso }}/{{ item.unidad }}{% else %}—{% endif %}
+            </td>
+            <td style="font-family:system-ui;font-weight:600">{{ item.costo|peso }}</td>
+            <td>
+              <form action="{{ url_for('admin.formula_linea_eliminar', fid=formula.id, lid=item.l.id) }}" method="POST">
+                <button type="submit" class="fml-del-btn"
+                        onclick="return confirm('¿Quitar esta línea?')">✕</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+
+          {# --- FILA DE TOTAL --- #}
+          {% if c.lineas %}
+          <tr class="fml-total-row">
+            <td colspan="3">Total líneas</td>
+            <td style="font-family:system-ui;font-weight:700">{{ (c.sub_insumos + c.sub_mo)|peso }}</td>
+            <td></td>
+          </tr>
+          {% if formula.amort_pct|float > 0 %}
+          <tr class="fml-extra-row">
+            <td colspan="3">+ Amort. herramientas ({{ formula.amort_pct|float|int }}% sobre materiales)</td>
+            <td style="font-family:system-ui">{{ c.sub_herr|peso }}</td>
+            <td></td>
+          </tr>
+          {% endif %}
+          {% if formula.reserva_pct|float > 0 %}
+          <tr class="fml-extra-row">
+            <td colspan="3">+ Reserva inflación ({{ formula.reserva_pct|float|int }}% sobre materiales)</td>
+            <td style="font-family:system-ui">{{ c.reserva|peso }}</td>
+            <td></td>
+          </tr>
+          {% endif %}
+          <tr class="fml-costo-total-row">
+            <td colspan="3">Costo total de producción</td>
+            <td style="font-family:system-ui">{{ c.costo_total|peso }}</td>
+            <td></td>
+          </tr>
+          {% endif %}
+
+          {# --- FILA AGREGAR --- #}
+          <tr class="fml-add-row">
+            <td colspan="5">
+              <form action="{{ url_for('admin.formula_linea_nueva', id=formula.id) }}"
+                    method="POST" class="fml-inline-form">
+                <input type="hidden" name="tipo" value="insumo">
+                <select name="item_ref" required class="fml-select-item">
+                  <option value="">— Seleccioná un ítem —</option>
+                  {% if insumos %}
+                  <optgroup label="📦 Insumos">
+                    {% for ins in insumos %}
+                    <option value="i_{{ ins.id }}">
+                      {{ ins.nombre }} — {{ ins.precio_unidad_fmt }}/{{ ins.unidad }}
+                    </option>
+                    {% endfor %}
+                  </optgroup>
+                  {% endif %}
+                  {% if manos %}
+                  <optgroup label="🤲 Mano de obra">
+                    {% for mo in manos %}
+                    <option value="m_{{ mo.id }}">
+                      {{ mo.nombre }} — {{ mo.tarifa_fmt }}/hs
+                    </option>
+                    {% endfor %}
+                  </optgroup>
+                  {% endif %}
+                </select>
+                <input type="number" name="cantidad" step="0.001" min="0.001"
+                       placeholder="Cantidad" required class="fml-qty-input" style="font-family:system-ui">
+                <button type="submit" class="btn btn-primary fml-add-btn">+ Agregar</button>
+              </form>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  {# ---- PANEL CÁLCULO ---- #}
+  <div class="fml-calc">
+    <div class="fml-calc-card">
+      <h2 class="fml-calc-title">Resumen de costos</h2>
+
+      <div class="fml-calc-block">
+        <div class="fml-calc-row">
+          <span>Materiales e insumos</span>
+          <span style="font-family:system-ui">{{ c.sub_insumos|peso }}</span>
+        </div>
+        <div class="fml-calc-row">
+          <span>Mano de obra</span>
+          <span style="font-family:system-ui">{{ c.sub_mo|peso }}</span>
+        </div>
+        <div class="fml-calc-row">
+          <span>Amort. herramientas ({{ formula.amort_pct|float|int }}%)</span>
+          <span style="font-family:system-ui">{{ c.sub_herr|peso }}</span>
+        </div>
+        <div class="fml-calc-row fml-calc-subtotal">
+          <span>Subtotal</span>
+          <span style="font-family:system-ui">{{ c.subtotal|peso }}</span>
+        </div>
+        <div class="fml-calc-row">
+          <span>Reserva inflación ({{ formula.reserva_pct|float|int }}%)</span>
+          <span style="font-family:system-ui">{{ c.reserva|peso }}</span>
+        </div>
+      </div>
+
+      <div class="fml-calc-total">
+        <span>Costo total</span>
+        <span style="font-family:system-ui">{{ c.costo_total|peso }}</span>
+      </div>
+
+      <div class="fml-pvp-block">
+        <div class="fml-calc-row fml-calc-indent" style="margin-bottom:.25rem">
+          <span style="color:#888">PVP calculado (margen {{ formula.margen_pct|float|int }}%)</span>
+          <span style="font-family:system-ui;color:#888">{{ c.pvp_calc|peso }}</span>
+        </div>
+        <form action="{{ url_for('admin.formula_pvp', id=formula.id) }}" method="POST" class="fml-pvp-form">
+          <div class="fml-pvp-label">
+            PVP a publicar
+            {% if formula.pvp_override %}<span class="fml-pvp-badge">Manual</span>{% endif %}
+          </div>
+          <div class="fml-pvp-input-row">
+            <span class="fml-pvp-sign">$</span>
+            <input type="number" name="pvp_override" step="500" min="0"
+                   value="{{ formula.pvp_override|float|int if formula.pvp_override else '' }}"
+                   placeholder="{{ c.pvp_calc|round|int }}"
+                   class="fml-pvp-input" style="font-family:system-ui">
+            <button type="submit" class="btn btn-primary">Fijar</button>
+            {% if formula.pvp_override %}
+            <button type="submit" name="pvp_override" value=""
+                    class="btn-action btn-action-ghost" style="font-size:.8rem">Auto</button>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+
+      <div class="fml-methods">
+        <h3 class="fml-methods-title">Precios por medio de pago</h3>
+        <div class="fml-method-row">
+          <span>Efectivo / Transferencia</span>
+          <strong style="font-family:system-ui">{{ c.pvp_final|peso }}</strong>
+        </div>
+        <div class="fml-method-row">
+          <span>MercadoPago (+{{ formula.mp_comision_pct|float|int }}%)</span>
+          <strong style="font-family:system-ui">{{ c.pvp_mp|peso }}</strong>
+        </div>
+        <div class="fml-method-row">
+          <span>Efectivo con descuento (-{{ formula.descuento_pct|float|int }}%)</span>
+          <strong style="font-family:system-ui">{{ c.pvp_desc|peso }}</strong>
+        </div>
+      </div>
+
+      <div class="fml-ganancia">
+        <div class="fml-ganancia-row">
+          <span>Ganancia neta</span>
+          <strong style="font-family:system-ui;color:var(--teal)">{{ c.ganancia|peso }}</strong>
+        </div>
+        <div class="fml-ganancia-row">
+          <span>Margen real</span>
+          <strong style="font-family:system-ui;color:var(--teal)">{{ '%.1f'|format(c.margen_real) }}%</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

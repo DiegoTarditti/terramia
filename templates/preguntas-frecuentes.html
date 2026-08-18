@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Preguntas frecuentes — Terramia{% endblock %}
+{% block description %}Respondemos las dudas más comunes sobre pedidos, envíos y piezas artesanales de Terramia.{% endblock %}
+
+{% block content %}
+<div class="page-banner">
+  <div class="container">
+    <div class="eyebrow" style="justify-content:flex-start;margin-bottom:14px">Todo lo que querés saber</div>
+    <h1>Preguntas frecuentes</h1>
+    <p>Las dudas más comunes, respondidas</p>
+  </div>
+</div>
+
+<section class="info-page">
+  <div class="container">
+    <div class="faq-list">
+
+      <details class="faq-item" data-rv>
+        <summary class="faq-q">¿Con cuánto tiempo de anticipación debo hacer mi pedido?</summary>
+        <div class="faq-a">
+          <p>El plazo mínimo es de <strong>20 días</strong>. Para pedidos grandes o muy personalizados, te recomendamos consultarnos antes para coordinar tiempos y asegurarnos de poder cumplir con lo que necesitás.</p>
+        </div>
+      </details>
+
+      <details class="faq-item" data-rv>
+        <summary class="faq-q">¿Cuánto tarda en llegar mi pedido?</summary>
+        <div class="faq-a">
+          <p>El tiempo de entrega depende del destino y el medio de envío elegido (Correo Argentino, OCA, Andreani). Una vez listo tu pedido, te confirmamos el plazo estimado antes de despacharlo.</p>
+        </div>
+      </details>
+
+      <details class="faq-item" data-rv>
+        <summary class="faq-q">¿Se pueden hacer cambios en el pedido?</summary>
+        <div class="faq-a">
+          <p>Dado que cada pieza se hace a mano y a pedido, no es posible realizar cambios una vez iniciada la producción. Si tenés dudas antes de confirmar, escribinos — estamos para ayudarte.</p>
+        </div>
+      </details>
+
+      <details class="faq-item" data-rv>
+        <summary class="faq-q">¿Hacen envíos a todo el país?</summary>
+        <div class="faq-a">
+          <p>Sí, coordinamos envíos a todo el país por distintos medios. Si estás en Funes también podés pasar a retirar personalmente.</p>
+        </div>
+      </details>
+
+      <details class="faq-item" data-rv>
+        <summary class="faq-q">¿Puedo pedir una pieza personalizada?</summary>
+        <div class="faq-a">
+          <p>Sí. Escribinos por WhatsApp contándonos qué tenés en mente — medidas, colores, uso — y armamos juntos algo único para vos.</p>
+        </div>
+      </details>
+
+    </div>
+
+    <div class="info-cta" data-rv>
+      <p>¿No encontrás lo que buscás?</p>
+      <a href="https://wa.me/{{ config.WHATSAPP_NUMBER }}?text=Hola%20Terramia!%20Tengo%20una%20pregunta." target="_blank" class="btn btn-fill">Escribinos por WhatsApp <span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+{% endblock %}

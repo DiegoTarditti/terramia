@@ -1,0 +1,53 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Categorías{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1>Categorías</h1>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:800px">
+
+  <!-- LISTA -->
+  <div>
+    <h2 style="font-size:1rem;margin-bottom:1rem;color:var(--teal)">Categorías existentes</h2>
+    {% if categorias %}
+    <ul class="cat-admin-list">
+      {% for cat in categorias %}
+      <li class="cat-admin-item">
+        <div>
+          <strong>{{ cat.nombre }}</strong>
+          <span style="font-size:.8rem;color:#888">/ {{ cat.slug }}</span>
+          <span style="font-size:.8rem;color:#888"> · {{ cat.productos|length }} producto{{ 's' if cat.productos|length != 1 }}</span>
+        </div>
+        {% if not cat.productos %}
+        <form action="{{ url_for('admin.categorias') }}" method="POST">
+          <input type="hidden" name="accion" value="eliminar">
+          <input type="hidden" name="id" value="{{ cat.id }}">
+          <button type="submit" class="btn-action btn-action-danger"
+                  onclick="return confirm('¿Eliminar categoría «{{ cat.nombre }}»?')">Eliminar</button>
+        </form>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p style="color:#888">No hay categorías todavía.</p>
+    {% endif %}
+  </div>
+
+  <!-- CREAR -->
+  <div>
+    <h2 style="font-size:1rem;margin-bottom:1rem;color:var(--teal)">Crear nueva categoría</h2>
+    <form action="{{ url_for('admin.categorias') }}" method="POST" class="admin-form" style="gap:1rem">
+      <input type="hidden" name="accion" value="crear">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ej: Porta velas" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Crear categoría</button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

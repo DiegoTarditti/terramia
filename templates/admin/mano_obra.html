@@ -1,0 +1,73 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Mano de obra{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1>Tipos de mano de obra</h1>
+</div>
+
+<details class="insumo-add-panel">
+  <summary>+ Agregar tipo</summary>
+  <div class="insumo-form-panel">
+    <form action="{{ url_for('admin.mano_de_obra_nueva') }}" method="POST" class="insumo-grid-form">
+      <div class="form-group">
+        <label>Nombre *</label>
+        <input type="text" name="nombre" placeholder="Ej: Modelado y acabados" required>
+      </div>
+      <div class="form-group">
+        <label>Tarifa ($/hora) *</label>
+        <input type="number" name="tarifa_hora" step="100" min="1"
+               placeholder="Ej: 6000" required>
+      </div>
+      <div class="form-group" style="grid-column:1/-1">
+        <label>Notas</label>
+        <input type="text" name="notas" placeholder="Opcional">
+      </div>
+      <div class="insumo-form-actions">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <small class="insumo-hint">El precio/hora se usa automáticamente en las fórmulas.</small>
+      </div>
+    </form>
+  </div>
+</details>
+
+{% if items %}
+<div class="admin-table-wrap" style="margin-top:1.5rem">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Tipo de labor</th>
+        <th>Tarifa/hora</th>
+        <th>Notas</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for mdo in items %}
+      <tr>
+        <td><strong>{{ mdo.nombre }}</strong></td>
+        <td style="font-family:system-ui;font-weight:700;color:var(--terracotta)">
+          {{ mdo.tarifa_fmt }}/hs
+        </td>
+        <td style="color:#888;font-size:.9rem">{{ mdo.notas or '—' }}</td>
+        <td class="actions-cell">
+          <a href="{{ url_for('admin.mano_de_obra_editar', id=mdo.id) }}"
+             class="btn-action btn-action-ghost">Editar</a>
+          <form action="{{ url_for('admin.mano_de_obra_eliminar', id=mdo.id) }}" method="POST" style="display:inline">
+            <button type="submit" class="btn-action btn-action-danger"
+                    onclick="return confirm('¿Eliminar «{{ mdo.nombre }}»?')">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="admin-empty" style="margin-top:1.5rem">
+  <span style="font-size:2.5rem">🤲</span>
+  <p>No hay tipos de mano de obra todavía.</p>
+  <p style="color:#888;font-size:.9rem">Usá el botón de arriba para agregar el primero.</p>
+</div>
+{% endif %}
+{% endblock %}

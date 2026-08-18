@@ -1,0 +1,94 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Productos{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1>Productos</h1>
+  <a href="{{ url_for('admin.producto_nuevo') }}" class="btn btn-primary">+ Agregar</a>
+</div>
+
+<!-- Filtros -->
+<div class="admin-filters">
+  <form method="GET" class="admin-search-form">
+    <input type="text" name="q" value="{{ q }}" placeholder="Buscar por nombre...">
+    <select name="cat">
+      <option value="">Todas las categorías</option>
+      {% for cat in categorias %}
+      <option value="{{ cat.id }}" {% if cat_id == cat.id %}selected{% endif %}>{{ cat.nombre }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-outline">Filtrar</button>
+  </form>
+</div>
+
+{% if productos %}
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in productos %}
+      <tr class="{% if not p.activo %}row-inactive{% endif %}">
+        <td>
+          {% if p.imagen_url %}
+            <img src="{{ p.imagen_url }}" alt="{{ p.nombre }}" class="admin-thumb">
+          {% else %}
+            <div class="admin-thumb-empty">🏺</div>
+          {% endif %}
+        </td>
+        <td>
+          <strong>{{ p.nombre }}</strong>
+          {% if p.destacado %}<span class="badge-sm badge-gold">★ Destacado</span>{% endif %}
+        </td>
+        <td>{{ p.categoria.nombre if p.categoria else '—' }}</td>
+        <td>{{ p.precio_fmt }}</td>
+        <td>
+          {% if p.stock is none %}
+            <span class="badge-sm badge-green">Sin límite</span>
+          {% elif p.stock == 0 %}
+            <span class="badge-sm badge-red">Sin stock</span>
+          {% else %}
+            {{ p.stock }}
+          {% endif %}
+        </td>
+        <td>
+          {% if p.activo %}
+            <span class="badge-sm badge-green">Activo</span>
+          {% else %}
+            <span class="badge-sm badge-gray">Inactivo</span>
+          {% endif %}
+        </td>
+        <td class="actions-cell">
+          <a href="{{ url_for('admin.producto_editar', id=p.id) }}" class="btn-action">Editar</a>
+          <form action="{{ url_for('admin.producto_toggle', id=p.id) }}" method="POST" style="display:inline">
+            <button type="submit" class="btn-action btn-action-ghost">
+              {{ 'Desactivar' if p.activo else 'Activar' }}
+            </button>
+          </form>
+          <form action="{{ url_for('admin.producto_eliminar', id=p.id) }}" method="POST" style="display:inline"
+                onsubmit="return confirm('¿Eliminar «{{ p.nombre }}»? No se puede deshacer.')">
+            <button type="submit" class="btn-action btn-action-danger">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty-state">
+  <span>🏺</span>
+  <p>No hay productos{% if q %} que coincidan con "{{ q }}"{% endif %}.</p>
+  <a href="{{ url_for('admin.producto_nuevo') }}" class="btn btn-primary">Agregar el primero</a>
+</div>
+{% endif %}
+{% endblock %}

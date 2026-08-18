@@ -1,0 +1,52 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1>Dashboard</h1>
+  <a href="{{ url_for('admin.producto_nuevo') }}" class="btn btn-primary">+ Agregar producto</a>
+</div>
+
+<div class="admin-stats">
+  <div class="stat-card">
+    <span class="stat-num">{{ total_productos }}</span>
+    <span class="stat-label">Productos activos</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-num">{{ total_categorias }}</span>
+    <span class="stat-label">Categorías</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-num">{{ destacados }}</span>
+    <span class="stat-label">Destacados en home</span>
+  </div>
+  {% if sin_stock > 0 %}
+  <div class="stat-card stat-warn">
+    <span class="stat-num">{{ sin_stock }}</span>
+    <span class="stat-label">Sin stock</span>
+  </div>
+  {% endif %}
+</div>
+
+<div class="admin-quick">
+  <h2>Accesos rápidos</h2>
+  <div class="quick-links">
+    <a href="{{ url_for('admin.producto_nuevo') }}" class="quick-card">
+      <span>➕</span>
+      <p>Agregar producto</p>
+    </a>
+    <a href="{{ url_for('admin.productos') }}" class="quick-card">
+      <span>🏺</span>
+      <p>Ver todos los productos</p>
+    </a>
+    <a href="{{ url_for('admin.categorias') }}" class="quick-card">
+      <span>📂</span>
+      <p>Gestionar categorías</p>
+    </a>
+    <a href="{{ url_for('tienda.index') }}" target="_blank" class="quick-card">
+      <span>🌐</span>
+      <p>Ver el sitio</p>
+    </a>
+  </div>
+</div>
+{% endblock %}

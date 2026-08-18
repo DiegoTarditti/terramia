@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+.claude/
+*.pyc
+instance/
+*.db
+.env
+static/uploads/
+server.log
+server_err.log
+fonts/

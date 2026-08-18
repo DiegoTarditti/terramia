@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Guía de compras — Terramia{% endblock %}
+{% block description %}Cómo comprar en Terramia: paso a paso para hacer tu pedido de cerámica artesanal.{% endblock %}
+
+{% block content %}
+<div class="page-banner">
+  <div class="container">
+    <div class="eyebrow" style="justify-content:flex-start;margin-bottom:14px">Comprá sin dudas</div>
+    <h1>Guía de compras</h1>
+    <p>Así de fácil es hacerte de una pieza única</p>
+  </div>
+</div>
+
+<section class="info-page">
+  <div class="container">
+    <div class="steps-list">
+
+      <div class="step-item" data-rv>
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Elegí tu pieza</h3>
+          <p>Explorá el catálogo y seleccioná lo que más te gusta. Podés filtrar por categoría o escribirnos si tenés algo particular en mente.</p>
+        </div>
+      </div>
+
+      <div class="step-item" data-rv>
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>Completá tus datos</h3>
+          <p>Al finalizar la compra ingresá tu nombre, dirección de entrega y datos de contacto para que podamos coordinar todo.</p>
+        </div>
+      </div>
+
+      <div class="step-item" data-rv>
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Elegí cómo pagar y recibir</h3>
+          <p>Seleccioná tu método de pago preferido y la forma de envío. Para Funes también podés coordinar retiro en persona.</p>
+        </div>
+      </div>
+
+      <div class="step-item" data-rv>
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h3>Envianos el comprobante</h3>
+          <p>Una vez realizado el pago, mandanos el comprobante por WhatsApp para confirmar tu pedido y empezar a prepararlo.</p>
+        </div>
+      </div>
+
+      <div class="step-item" data-rv>
+        <div class="step-num">05</div>
+        <div class="step-body">
+          <h3>Recibí tu pedido</h3>
+          <p>Preparamos tu pieza con cuidado y la embalamos para que llegue perfecta. Te avisamos cuando esté en camino.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="info-cta" data-rv>
+      <p>¿Tenés alguna duda antes de comprar?</p>
+      <a href="https://wa.me/{{ config.WHATSAPP_NUMBER }}?text=Hola%20Terramia!%20Tengo%20una%20consulta%20sobre%20un%20pedido." target="_blank" class="btn btn-fill">Escribinos por WhatsApp <span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+{% endblock %}

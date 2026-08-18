@@ -1,0 +1,68 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Rubros{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1>Rubros de insumos</h1>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:860px">
+
+  <!-- LISTA -->
+  <div>
+    <h2 style="font-size:1rem;margin-bottom:1rem;color:var(--teal)">Rubros existentes</h2>
+    {% if rubros %}
+    <ul class="cat-admin-list">
+      {% for r in rubros %}
+      <li class="cat-admin-item">
+        <div style="display:flex;align-items:center;gap:.75rem;flex:1">
+          <span class="insumo-badge insumo-badge--{{ r.nombre }}" style="min-width:80px;text-align:center">
+            {{ r.nombre }}
+          </span>
+          <span style="font-size:.85rem;color:#888">
+            {{ conteos[r.nombre] }} insumo{{ 's' if conteos[r.nombre] != 1 }}
+          </span>
+        </div>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <!-- editar inline -->
+          <form action="{{ url_for('admin.rubros') }}" method="POST"
+                style="display:flex;gap:.4rem;align-items:center">
+            <input type="hidden" name="accion" value="editar">
+            <input type="hidden" name="id" value="{{ r.id }}">
+            <input type="text" name="nombre_nuevo" value="{{ r.nombre }}"
+                   style="width:120px;padding:.3rem .5rem;border:1.5px solid #e0d8d3;border-radius:6px;font-size:.85rem">
+            <button type="submit" class="btn-action btn-action-ghost" style="font-size:.78rem">Renombrar</button>
+          </form>
+          {% if conteos[r.nombre] == 0 %}
+          <form action="{{ url_for('admin.rubros') }}" method="POST">
+            <input type="hidden" name="accion" value="eliminar">
+            <input type="hidden" name="id" value="{{ r.id }}">
+            <button type="submit" class="btn-action btn-action-danger"
+                    onclick="return confirm('¿Eliminar «{{ r.nombre }}»?')">✕</button>
+          </form>
+          {% endif %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p style="color:#888">No hay rubros todavía.</p>
+    {% endif %}
+  </div>
+
+  <!-- CREAR -->
+  <div>
+    <h2 style="font-size:1rem;margin-bottom:1rem;color:var(--teal)">Crear nuevo rubro</h2>
+    <form action="{{ url_for('admin.rubros') }}" method="POST" class="admin-form" style="gap:1rem">
+      <input type="hidden" name="accion" value="crear">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" name="nombre" placeholder="Ej: fibras naturales" required>
+        <small>Se guarda en minúscula.</small>
+      </div>
+      <button type="submit" class="btn btn-primary">Crear rubro</button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

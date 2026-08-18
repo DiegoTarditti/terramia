@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- HERO -->
+<header class="hero" id="inicio">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="wrap hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow" data-rv>Cerámica hecha a mano</div>
+      <h1 data-rv class="dl1">
+        <span style="white-space:nowrap">Hecho de</span><br><em>tierra</em>,
+        <span class="sm">moldeado con las manos y el tiempo.</span>
+      </h1>
+      <p data-rv class="dl2">Cada pieza de Terramia nace del barro y se transforma con calma, color y un poco de alma. Objetos únicos para llenar de calidez tu hogar.</p>
+      <div class="hero-cta" data-rv class="dl3">
+        <a href="{{ url_for('tienda.catalogo') }}" class="btn btn-fill">Ver el catálogo <span class="ar">→</span></a>
+      </div>
+    </div>
+    <div class="hero-right" data-rv class="dl2">
+      <div class="hero-obj">
+        <div class="ring r1"></div>
+        <div class="ring r2"></div>
+        <div class="hero-photo">
+          <img src="{{ url_for('static', filename='uploads/hero-monstera.png') }}"
+               alt="Pieza artesanal Terramia" loading="eager">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Deslizá</span><span class="ln"></span></div>
+</header>
+
+<!-- HISTORIA -->
+<section class="historia" id="historia">
+  <div class="wrap">
+    <div class="eyebrow" data-rv>Nuestra esencia</div>
+    <h2 class="title" data-rv>Un oficio que <em>late despacio</em></h2>
+    <div class="split">
+      <div class="txt" data-rv class="dl1">
+        <p>Terramia nació del amor por lo hecho a mano y por los materiales que vienen de la tierra. Cada pieza lleva horas de trabajo, paciencia y cariño.</p>
+        <p class="pull">"No hacemos dos piezas iguales. Esa diferencia es lo que las hace unicas."</p>
+        <p>Trabajamos con barro natural y técnicas artesanales, buscando que cada pieza traiga calidez, textura y un poco de naturaleza a tu espacio.</p>
+        <div class="sign">Con amor, Terramia</div>
+      </div>
+      <div class="obj" data-rv class="dl2">
+        <div class="historia-photo">
+          <img src="{{ url_for('static', filename='uploads/esencia-manos-2.png') }}"
+               alt="Manos trabajando cerámica" loading="lazy">
+        </div>
+        <div class="stamp">
+          <span class="x">✦</span>
+          <span class="t">Hecho a mano</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALORES -->
+<section class="valores" id="valores">
+  <div class="wrap">
+    <div class="vhead">
+      <div class="eyebrow" data-rv style="justify-content:center">Por qué Terramia</div>
+      <h2 class="title" data-rv>
+        <span style="display:block">Lo que nos</span>
+        <span style="display:block">hace <em>distintas</em></span>
+      </h2>
+    </div>
+    <div class="vcards">
+      <div class="vcard" data-rv>
+        <div class="ico">🤲</div>
+        <h4>100% artesanal</h4>
+        <p>Cada pieza se modela, pinta y hornea a mano. Sin moldes industriales ni producción en serie.</p>
+      </div>
+      <div class="vcard" data-rv class="dl1">
+        <div class="ico">🌱</div>
+        <h4>Materiales nobles</h4>
+        <p>Barro natural y esmaltes no tóxicos, libres de sustancias nocivas, pensados para acompañarte por muchos años.</p>
+      </div>
+      <div class="vcard" data-rv class="dl2">
+        <div class="ico">✨</div>
+        <h4>Piezas únicas</h4>
+        <p>No existen dos iguales. Tu pieza tendrá su propia textura, color y personalidad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESTACADOS -->
+{% if destacados %}
+<section class="section-products" id="catalogo-preview">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow" data-rv style="justify-content:center">Colección</div>
+      <h2 class="title" data-rv>
+        <span style="display:block">Explorá nuestras</span>
+        <span style="display:block"><em>piezas</em></span>
+      </h2>
+      <p data-rv>Una selección de lo que hacemos. Sin producción en serie — cada pieza tiene su momento.</p>
+    </div>
+    <div class="section-subhead" data-rv>
+      <h3>Piezas destacadas</h3>
+      <a href="{{ url_for('tienda.catalogo') }}" class="ver-todos">Ver todo el catálogo →</a>
+    </div>
+    <div class="products-grid">
+      {% set gradients = ['pg1', 'pg2', 'pg3'] %}
+      {% for p in destacados %}
+      <article class="product-card" data-rv>
+        <a href="{{ url_for('tienda.producto', id=p.id) }}" class="product-img-wrap">
+          {% if p.imagen_url %}
+            <img src="{{ p.imagen_url }}" alt="{{ p.nombre }}" loading="lazy">
+          {% else %}
+            <div class="product-placeholder {{ gradients[loop.index0 % 3] }}">
+              <span class="e">🏺</span>
+            </div>
+          {% endif %}
+        </a>
+        <div class="product-info">
+          {% if p.categoria %}<span class="product-cat">{{ p.categoria.nombre }}</span>{% endif %}
+          <h3 class="product-name"><a href="{{ url_for('tienda.producto', id=p.id) }}">{{ p.nombre }}</a></h3>
+          {% if p.descripcion %}<p class="product-desc-short">{{ p.descripcion[:80] }}…</p>{% endif %}
+          <div class="product-footer">
+            <span class="product-price">{{ p.precio_fmt }}</span>
+            <form action="{{ url_for('carrito.agregar', id=p.id) }}" method="POST" class="add-form">
+              <input type="hidden" name="cantidad" value="1">
+              <button type="submit" class="btn-add" aria-label="Agregar al carrito">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="wrap">
+    <div class="cta-card">
+      <div class="glow g1"></div>
+      <div class="glow g2"></div>
+      <div class="eyebrow" data-rv>Hagamos algo juntos</div>
+      <h2 data-rv>¿Buscás una pieza <em>única</em><br>o un encargo a medida?</h2>
+      <p data-rv>Escribinos y armamos juntos lo que tenés en mente.<br>Pedidos personalizados a todo el país.</p>
+      <div class="cta-actions" data-rv>
+        <a href="https://wa.me/{{ config.WHATSAPP_NUMBER }}?text=Hola%20Terramia!%20🏺%20Quiero%20hacer%20un%20encargo." target="_blank" class="btn btn-dark">
+          Escribir por WhatsApp
+        </a>
+        <a href="{{ url_for('tienda.catalogo') }}" class="btn btn-dark">
+          Ver el catálogo
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

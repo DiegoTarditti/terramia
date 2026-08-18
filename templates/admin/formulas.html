@@ -1,0 +1,60 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Fórmulas{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1>Fórmulas de producción</h1>
+  <a href="{{ url_for('admin.formula_nueva') }}" class="btn btn-primary">+ Nueva fórmula</a>
+</div>
+
+{% if resumen %}
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Pieza</th>
+        <th>Producto vinculado</th>
+        <th>Costo total</th>
+        <th>PVP efectivo</th>
+        <th>PVP MercadoPago</th>
+        <th>Ganancia neta</th>
+        <th>Margen real</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in resumen %}
+      {% set f = row.f %}
+      {% set c = row.c %}
+      <tr>
+        <td><strong>{{ f.nombre }}</strong></td>
+        <td style="color:#888">{{ f.producto.nombre if f.producto else '—' }}</td>
+        <td style="font-family:system-ui">{{ c.costo_total|peso }}</td>
+        <td style="font-family:system-ui;font-weight:700;color:var(--terracotta)">{{ c.pvp_final|peso }}</td>
+        <td style="font-family:system-ui">{{ c.pvp_mp|peso }}</td>
+        <td style="font-family:system-ui">{{ c.ganancia|peso }}</td>
+        <td style="font-family:system-ui">
+          <span class="badge-sm {% if c.margen_real >= 30 %}badge-green{% elif c.margen_real >= 15 %}badge-gold{% else %}badge-red{% endif %}">
+            {{ '%.1f'|format(c.margen_real) }}%
+          </span>
+        </td>
+        <td class="actions-cell">
+          <a href="{{ url_for('admin.formula_detalle', id=f.id) }}" class="btn-action">Ver / Editar</a>
+          <form action="{{ url_for('admin.formula_eliminar', id=f.id) }}" method="POST" style="display:inline">
+            <button type="submit" class="btn-action btn-action-danger"
+                    onclick="return confirm('¿Eliminar «{{ f.nombre }}»?')">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="admin-empty">
+  <span style="font-size:2.5rem">📐</span>
+  <p>No hay fórmulas todavía.</p>
+  <p style="color:#888;font-size:.9rem">Creá la primera con el botón de arriba.</p>
+</div>
+{% endif %}
+{% endblock %}

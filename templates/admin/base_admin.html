@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin{% endblock %} — Terramia</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>html { font-size: 18px }</style>
+</head>
+<body class="admin-body">
+
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      <span class="logo-script" style="color:var(--peach);font-size:1.5rem">Terramia</span>
+      <span style="font-size:.7rem;color:#aaa;display:block">Panel admin</span>
+    </div>
+    <nav class="admin-nav">
+      <a href="{{ url_for('admin.dashboard') }}" class="admin-navlink">📊 Dashboard</a>
+      <a href="{{ url_for('admin.productos') }}" class="admin-navlink">🏺 Productos</a>
+      <a href="{{ url_for('admin.producto_nuevo') }}" class="admin-navlink">➕ Agregar producto</a>
+      <a href="{{ url_for('admin.categorias') }}" class="admin-navlink">📂 Categorías</a>
+      <a href="{{ url_for('admin.rubros') }}" class="admin-navlink">🏷️ Rubros</a>
+      <a href="{{ url_for('admin.insumos') }}" class="admin-navlink">🧪 Insumos</a>
+      <a href="{{ url_for('admin.formulas') }}" class="admin-navlink">📐 Fórmulas</a>
+      <a href="{{ url_for('admin.configuracion') }}" class="admin-navlink">⚙️ Configuración</a>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <a href="{{ url_for('tienda.index') }}" target="_blank" class="admin-navlink">🌐 Ver sitio</a>
+      <a href="{{ url_for('admin.logout') }}" class="admin-navlink logout">🚪 Salir</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for cat, msg in messages %}
+          <div class="flash flash--{{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+
+</body>
+</html>

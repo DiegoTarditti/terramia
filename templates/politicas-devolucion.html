@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Políticas de devolución — Terramia{% endblock %}
+{% block description %}Información sobre devoluciones y cambios en Terramia, cerámica artesanal hecha a mano.{% endblock %}
+
+{% block content %}
+<div class="page-banner">
+  <div class="container">
+    <div class="eyebrow" style="justify-content:flex-start;margin-bottom:14px">Comprá con confianza</div>
+    <h1>Políticas de devolución</h1>
+    <p>Todo lo que necesitás saber antes de comprar</p>
+  </div>
+</div>
+
+<section class="info-page">
+  <div class="container">
+    <div class="policy-content" data-rv>
+
+      <div class="policy-block">
+        <h3>Piezas únicas, sin devolución</h3>
+        <p>Cada pieza de Terramia se hace a mano y a pedido. Por la naturaleza artesanal del proceso, <strong>no aceptamos devoluciones ni cambios</strong> una vez confirmado y producido el pedido.</p>
+        <p>Te recomendamos consultar todas tus dudas antes de confirmar la compra — estamos disponibles por WhatsApp para ayudarte a elegir.</p>
+      </div>
+
+      <div class="policy-block">
+        <h3>¿La pieza llegó dañada?</h3>
+        <p>Si tu pedido llega con daños causados por el envío, <strong>contactanos dentro de las 48 hs</strong> de recibido con:</p>
+        <ul class="policy-list">
+          <li>Fotos del embalaje exterior</li>
+          <li>Fotos de la pieza dañada</li>
+        </ul>
+        <p>Analizamos cada caso y buscamos la mejor solución juntas.</p>
+      </div>
+
+      <div class="policy-block">
+        <h3>Encargos personalizados</h3>
+        <p>Para pedidos a medida, acordamos todos los detalles antes de comenzar la producción. Una vez iniciado el proceso, no es posible realizar modificaciones.</p>
+      </div>
+
+    </div>
+
+    <div class="info-cta" data-rv>
+      <p>¿Tenés una consulta antes de comprar?</p>
+      <a href="https://wa.me/{{ config.WHATSAPP_NUMBER }}?text=Hola%20Terramia!%20Tengo%20una%20consulta%20antes%20de%20comprar." target="_blank" class="btn btn-fill">Escribinos por WhatsApp <span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+{% endblock %}

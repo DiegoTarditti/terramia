@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Nosotros — Terramia{% endblock %}
+
+{% block content %}
+<div class="page-banner">
+  <div class="container">
+    <h1>Nuestra historia</h1>
+    <p>Cerámica artesanal con alma</p>
+  </div>
+</div>
+
+<div class="container nosotros-content">
+  <div class="nosotros-grid">
+    <div class="nosotros-text">
+      <h2>¿Quiénes somos?</h2>
+      <p>Terramia nació de las manos y del corazón. Cada pieza es creada con arcilla local, técnicas artesanales y mucho amor por el oficio.</p>
+      <p>Trabajamos en un pequeño taller donde el tiempo y la paciencia son los ingredientes principales. No hay dos piezas iguales — eso es precisamente lo que las hace especiales.</p>
+      <p>Creemos en la belleza de lo imperfecto, en los objetos que cuentan historias y en la conexión entre las manos que crean y las que reciben.</p>
+    </div>
+    <div class="nosotros-values">
+      <div class="value-card">
+        <span>🌱</span>
+        <h3>Materiales naturales</h3>
+        <p>Arcilla sin aditivos dañinos, esmaltes seguros para alimentos.</p>
+      </div>
+      <div class="value-card">
+        <span>🤲</span>
+        <h3>100% artesanal</h3>
+        <p>Sin moldes industriales. Cada pieza construida a mano.</p>
+      </div>
+      <div class="value-card">
+        <span>🎁</span>
+        <h3>Piezas personalizadas</h3>
+        <p>¿Tenés una idea especial? Hacemos pedidos a medida.</p>
+      </div>
+      <div class="value-card">
+        <span>📦</span>
+        <h3>Envío seguro</h3>
+        <p>Cada pieza se embala con cuidado para que llegue perfecta.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nosotros-cta">
+    <h2>¿Querés una pieza única?</h2>
+    <p>Escribinos y hacemos algo especial para vos.</p>
+    <a href="https://wa.me/{{ config.WHATSAPP_NUMBER }}" class="btn btn-wa" target="_blank">Contactar por WhatsApp</a>
+  </div>
+</div>
+{% endblock %}

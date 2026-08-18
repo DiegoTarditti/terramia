@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Catálogo — Terramia{% endblock %}
+
+{% block content %}
+<div class="container catalog-layout">
+
+  <!-- SIDEBAR FILTROS -->
+  <aside class="catalog-sidebar">
+
+    <div class="sidebar-block">
+      <h3>Categorías</h3>
+      <ul class="cat-list">
+        <li>
+          <a href="{{ url_for('tienda.catalogo') }}{% if q %}?q={{ q }}{% endif %}"
+             class="cat-link {% if not cat_activa %}active{% endif %}">
+            Todos los productos
+          </a>
+        </li>
+        {% for cat in categorias %}
+        <li>
+          <a href="{{ url_for('tienda.catalogo') }}?cat={{ cat.slug }}{% if q %}&q={{ q }}{% endif %}"
+             class="cat-link {% if cat_activa == cat.slug %}active{% endif %}">
+            {{ cat.nombre }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="sidebar-block">
+      <h3>Precio</h3>
+      <ul class="cat-list">
+        <a href="{{ url_for('tienda.catalogo') }}{% if cat_activa %}?cat={{ cat_activa }}{% endif %}"
+           class="cat-link {% if not request.args.get('precio') %}active{% endif %}">
+          Todos
+        </a>
+        {% set precio = request.args.get('precio', '') %}
+        {% for label, val in [('Hasta $5.000', '0-5000'), ('$5.000 – $10.000', '5000-10000'), ('Más de $10.000', '10000+')] %}
+        <li>
+          <a href="{{ url_for('tienda.catalogo') }}?{% if cat_activa %}cat={{ cat_activa }}&{% endif %}precio={{ val }}{% if q %}&q={{ q }}{% endif %}"
+             class="cat-link {% if precio == val %}active{% endif %}">
+            {{ label }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    {% if cat_activa or q or request.args.get('precio') %}
+    <a href="{{ url_for('tienda.catalogo') }}" class="clear-filters">✕ Limpiar filtros</a>
+    {% endif %}
+
+  </aside>
+
+  <!-- PRODUCTOS -->
+  <div class="catalog-main">
+    <div class="catalog-meta">
+      <nav class="breadcrumb">
+        <a href="{{ url_for('tienda.index') }}">Inicio</a> /
+        <span>Catálogo</span>
+        {% if cat_activa %} / <span>{{ categorias | selectattr('slug', 'eq', cat_activa) | map(attribute='nombre') | first }}</span>{% endif %}
+      </nav>
+      <p class="results-count">
+        {% if productos %}{{ productos|length }} producto{{ 's' if productos|length != 1 }}{% endif %}
+        {% if q %} para "<strong>{{ q }}</strong>"{% endif %}
+      </p>
+    </div>
+    <div class="aviso-produccion">
+      <span class="aviso-icon">🕐</span>
+      <div>
+        <div class="aviso-titulo">Antes de comprar</div>
+        <p>Todas las piezas son artesanales y pintadas a mano. Se realizan por pedido con una demora de 20 días hábiles aproximadamente y se confirman con el pago total vía comprobante. Algunas piezas pueden estar en stock con entrega inmediata — consultanos.</p>
+      </div>
+    </div>
+
+    {% if productos %}
+    <div class="products-grid-shop">
+      {% for p in productos %}
+      <article class="product-card-shop">
+        <a href="{{ url_for('tienda.producto', id=p.id) }}" class="product-img-wrap-shop">
+          {% if p.imagen_url %}
+            <img src="{{ p.imagen_url }}" alt="{{ p.nombre }}" loading="lazy">
+          {% else %}
+            <div class="product-placeholder"><span>🏺</span></div>
+          {% endif %}
+        </a>
+        <div class="product-info-shop">
+          {% if p.categoria %}<span class="product-cat">{{ p.categoria.nombre }}</span>{% endif %}
+          <h3 class="product-name-shop">
+            <a href="{{ url_for('tienda.producto', id=p.id) }}">{{ p.nombre }}</a>
+          </h3>
+          <div class="product-footer-shop">
+            <span class="product-price">{{ p.precio_fmt }}</span>
+            <form action="{{ url_for('carrito.agregar', id=p.id) }}" method="POST" class="add-form">
+              <input type="hidden" name="cantidad" value="1">
+              <button type="submit" class="btn-add" aria-label="Agregar al carrito">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <span>🏺</span>
+      <p>No se encontraron productos{% if q %} para "{{ q }}"{% endif %}.</p>
+      <a href="{{ url_for('tienda.catalogo') }}" class="btn btn-primary">Ver todos</a>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

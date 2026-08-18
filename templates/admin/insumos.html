@@ -1,0 +1,141 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Insumos{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1>Registro de insumos</h1>
+</div>
+
+<!-- FORM AGREGAR -->
+<details class="insumo-add-panel">
+  <summary>+ Agregar insumo</summary>
+  <div class="insumo-form-panel">
+    <form action="{{ url_for('admin.insumo_nuevo') }}" method="POST" class="insumo-grid-form">
+      <div class="form-group">
+        <label>Nombre *</label>
+        <input type="text" name="nombre" placeholder="Ej: Arcilla blanca" required>
+      </div>
+      <div class="form-group">
+        <label>Categoría</label>
+        <select name="categoria">
+          {% for r in categorias %}
+          <option value="{{ r.nombre }}">{{ r.nombre|capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Proveedor</label>
+        <input type="text" name="proveedor" placeholder="Ej: Cerámica del Norte">
+      </div>
+      <div class="form-group">
+        <label>Unidad *</label>
+        <select name="unidad">
+          <option value="gr">gr</option>
+          <option value="kg">kg</option>
+          <option value="ml">ml</option>
+          <option value="l">l</option>
+          <option value="unidad">unidad</option>
+          <option value="hoja">hoja</option>
+          <option value="cubo">cubo</option>
+          <option value="hs">hs</option>
+          <option value="m">m</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Precio de compra ($) *</label>
+        <input type="number" name="precio_compra" step="0.01" min="0.01"
+               placeholder="Total pagado. Ej: 3039" required>
+      </div>
+      <div class="form-group">
+        <label>Cantidad comprada *</label>
+        <input type="number" name="cantidad_compra" step="0.0001" min="0.0001"
+               placeholder="Unidades de lo comprado. Ej: 1000" required>
+      </div>
+      <div class="form-group">
+        <label>Fecha de compra</label>
+        <input type="date" name="fecha_compra">
+      </div>
+      <div class="form-group">
+        <label>Notas</label>
+        <input type="text" name="notas" placeholder="Opcional — ej: bolsa 1kg">
+      </div>
+      <div class="insumo-form-actions">
+        <button type="submit" class="btn btn-primary">Guardar insumo</button>
+        <small class="insumo-hint">El precio/unidad se calcula automáticamente.</small>
+      </div>
+    </form>
+  </div>
+</details>
+
+<!-- FILTROS -->
+<div class="insumo-filters">
+  <form method="GET" class="admin-search-form">
+    <input type="text" name="q" value="{{ q }}" placeholder="Buscar...">
+    <select name="cat" onchange="this.form.submit()">
+      <option value="">Todas las categorías</option>
+      {% for r in categorias %}
+      <option value="{{ r.nombre }}" {% if cat == r.nombre %}selected{% endif %}>{{ r.nombre|capitalize }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn-action">Buscar</button>
+    {% if q or cat %}
+    <a href="{{ url_for('admin.insumos') }}" class="btn-action btn-action-ghost">✕ Limpiar</a>
+    {% endif %}
+  </form>
+  {% if insumos %}
+  <span class="insumo-count" style="font-family:system-ui">{{ insumos|length }} insumo{{ 's' if insumos|length != 1 }}</span>
+  {% endif %}
+</div>
+
+<!-- TABLA -->
+{% if insumos %}
+<div class="admin-table-wrap">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Proveedor</th>
+        <th>Precio compra</th>
+        <th>Cantidad</th>
+        <th>Precio / unidad</th>
+        <th>Fecha compra</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ins in insumos %}
+      <tr>
+        <td>
+          <strong>{{ ins.nombre }}</strong>
+          {% if ins.notas %}<br><span class="insumo-nota">{{ ins.notas }}</span>{% endif %}
+        </td>
+        <td><span class="insumo-badge insumo-badge--{{ ins.categoria }}">{{ ins.categoria }}</span></td>
+        <td>{{ ins.proveedor or '—' }}</td>
+        <td style="font-family:system-ui">{{ ins.precio_compra_fmt }}</td>
+        <td style="font-family:system-ui">{{ ins.cantidad_fmt }} {{ ins.unidad }}</td>
+        <td class="insumo-ppu" style="font-family:system-ui">{{ ins.precio_unidad_fmt }}<span class="insumo-ppu-unit">/{{ ins.unidad }}</span></td>
+        <td style="font-family:system-ui;font-size:.85rem">
+          {{ ins.fecha_compra.strftime('%d/%m/%Y') if ins.fecha_compra else '—' }}
+        </td>
+        <td class="actions-cell">
+          <a href="{{ url_for('admin.insumo_editar', id=ins.id) }}" class="btn-action btn-action-ghost">Editar</a>
+          <form action="{{ url_for('admin.insumo_eliminar', id=ins.id) }}" method="POST" style="display:inline">
+            <button type="submit" class="btn-action btn-action-danger"
+                    onclick="return confirm('¿Eliminar «{{ ins.nombre }}»?')">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="admin-empty">
+  <span style="font-size:2.5rem">🧪</span>
+  <p>No hay insumos registrados aún.</p>
+  <p style="color:#888;font-size:.9rem">Usá el botón de arriba para agregar el primero.</p>
+</div>
+{% endif %}
+
+{% endblock %}

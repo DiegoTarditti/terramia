@@ -1,0 +1,98 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1>{{ titulo }}</h1>
+  <a href="{{ url_for('admin.formulas') }}" class="btn-action btn-action-ghost">← Volver</a>
+</div>
+
+<div class="form-section" style="max-width:680px">
+  <form action="{{ url_for('admin.formula_nueva') if not formula else url_for('admin.formula_editar', id=formula.id) }}"
+        method="POST" class="admin-form">
+
+    <div class="form-group">
+      <label>Nombre de la pieza *</label>
+      <input type="text" name="nombre" value="{{ formula.nombre if formula else '' }}"
+             placeholder="Ej: Portasahumeros 7cm diám × 3cm alto" required>
+    </div>
+
+    <div class="form-group">
+      <label>Vincular a producto (opcional)</label>
+      <select name="producto_id">
+        <option value="">— Sin vincular —</option>
+        {% for p in productos %}
+        <option value="{{ p.id }}"
+          {% if formula and formula.producto_id == p.id %}selected{% endif %}>
+          {{ p.nombre }}
+        </option>
+        {% endfor %}
+      </select>
+      <small>Si lo vinculás, el PVP de la fórmula puede actualizarse al del catálogo.</small>
+    </div>
+
+    <h2 style="font-size:1rem;font-weight:700;color:var(--teal);margin-top:.5rem">Porcentajes de cálculo</h2>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Amort. herramientas (%)</label>
+        <input type="number" name="amort_pct" step="0.1" min="0"
+               value="{{ formula.amort_pct|float if formula else (defaults.amort_pct if defaults else 6) }}"
+               placeholder="{{ defaults.amort_pct if defaults else 6 }}">
+        <small>Sobre subtotal insumos</small>
+      </div>
+      <div class="form-group">
+        <label>Reserva inflación (%)</label>
+        <input type="number" name="reserva_pct" step="0.1" min="0"
+               value="{{ formula.reserva_pct|float if formula else (defaults.reserva_pct if defaults else 15) }}"
+               placeholder="{{ defaults.reserva_pct if defaults else 15 }}">
+        <small>Sobre insumos directos</small>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Margen de ganancia (%)</label>
+        <input type="number" name="margen_pct" step="0.1" min="0" max="99"
+               value="{{ formula.margen_pct|float if formula else (defaults.margen_pct if defaults else 40) }}"
+               placeholder="{{ defaults.margen_pct if defaults else 40 }}">
+      </div>
+      <div class="form-group">
+        <label>Tarifa taller ($/cubo)</label>
+        <input type="number" name="tarifa_taller" step="1" min="0"
+               value="{{ formula.tarifa_taller|float|int if formula else 2200 }}" placeholder="2200">
+        <small>1 cubo = 10×10×10cm en horno</small>
+      </div>
+    </div>
+
+    <h2 style="font-size:1rem;font-weight:700;color:var(--teal)">Medios de pago</h2>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Comisión MercadoPago (%)</label>
+        <input type="number" name="mp_comision_pct" step="0.1" min="0"
+               value="{{ formula.mp_comision_pct|float if formula else (defaults.mp_comision_pct if defaults else 5) }}"
+               placeholder="{{ defaults.mp_comision_pct if defaults else 5 }}">
+      </div>
+      <div class="form-group">
+        <label>Descuento efectivo (%)</label>
+        <input type="number" name="descuento_pct" step="0.1" min="0"
+               value="{{ formula.descuento_pct|float if formula else (defaults.descuento_pct if defaults else 10) }}"
+               placeholder="{{ defaults.descuento_pct if defaults else 10 }}">
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        {{ 'Crear fórmula' if not formula else 'Guardar cambios' }}
+      </button>
+      {% if formula %}
+      <a href="{{ url_for('admin.formula_detalle', id=formula.id) }}" class="btn-action btn-action-ghost">
+        Cancelar
+      </a>
+      {% endif %}
+    </div>
+
+  </form>
+</div>
+{% endblock %}
