@@ -27,22 +27,19 @@
               <div class="product-placeholder large"><span>🏺</span></div>
             {% endif %}
           </div>
-          <div class="img-slide">
-            <img src="{{ url_for('static', filename='img/paleta-colores.png') }}"
-                 alt="Paleta de colores disponibles">
-          </div>
-        </div>
-        <button class="slider-arrow slider-prev" id="sliderPrev">&#8249;</button>
-        <button class="slider-arrow slider-next" id="sliderNext">&#8250;</button>
-        <div class="img-slider-dots">
-          <button class="img-slider-dot active" data-slide="0"></button>
-          <button class="img-slider-dot" data-slide="1"></button>
         </div>
       </div>
       <div class="paleta-bloque">
         <div class="paleta-label">Colores disponibles <span id="colorCount" style="font-size:.85em;font-weight:400;color:#aaa;">(elegí hasta 4)</span></div>
-        <div id="colorGrid" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;"></div>
-        <p class="paleta-nota" id="paletaNota" style="margin-top:8px;">Hacé clic para seleccionar colores. Se agregarán al mensaje de WhatsApp.</p>
+        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-top:10px;">
+          <img src="{{ url_for('static', filename='img/paleta-colores.png') }}"
+               alt="Paleta de colores"
+               style="width:220px;border-radius:8px;flex-shrink:0;">
+          <div>
+            <div id="colorGrid" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+            <p class="paleta-nota" id="paletaNota" style="margin-top:8px;">Hacé clic para seleccionar. Se agregan al mensaje de WhatsApp.</p>
+          </div>
+        </div>
       </div>
     </div>
 
