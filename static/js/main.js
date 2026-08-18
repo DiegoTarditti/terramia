@@ -1,6 +1,7 @@
-// Nav scroll
+// Nav scroll — en páginas sin hero el fondo aparece siempre
 const nav = document.getElementById('siteNav');
-window.addEventListener('scroll', () => nav?.classList.toggle('scrolled', window.scrollY > 40));
+if (nav && window.location.pathname !== '/') nav.classList.add('scrolled');
+window.addEventListener('scroll', () => nav?.classList.toggle('scrolled', window.scrollY > 40 || window.location.pathname !== '/'));
 
 // Mobile menu
 const burger = document.getElementById('burgerBtn');
