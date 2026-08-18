@@ -27,6 +27,16 @@
               <div class="product-placeholder large"><span>🏺</span></div>
             {% endif %}
           </div>
+          <div class="img-slide">
+            <img src="{{ url_for('static', filename='img/paleta-colores.png') }}"
+                 alt="Paleta de colores disponibles">
+          </div>
+        </div>
+        <button class="slider-arrow slider-prev" id="sliderPrev">&#8249;</button>
+        <button class="slider-arrow slider-next" id="sliderNext">&#8250;</button>
+        <div class="img-slider-dots">
+          <button class="img-slider-dot active" data-slide="0"></button>
+          <button class="img-slider-dot" data-slide="1"></button>
         </div>
       </div>
       <div class="paleta-bloque">
@@ -203,8 +213,13 @@
     btn.style.cssText = `
       width:36px;height:36px;border-radius:50%;background:${c.hex};
       border:3px solid transparent;cursor:pointer;transition:transform .15s,border-color .15s;
-      outline:none;position:relative;flex-shrink:0;
+      outline:none;position:relative;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.3);
     `;
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:4px;width:52px;';
+    const label = document.createElement('span');
+    label.style.cssText = 'font-size:10px;color:#bbb;text-align:center;line-height:1.2;';
+    label.textContent = `${i + 1}. ${c.nombre}`;
     btn.addEventListener('mouseenter', () => {
       document.getElementById('paletaNota').textContent = `${i + 1}. ${c.nombre}`;
     });
@@ -233,7 +248,9 @@
         : 'Hacé clic para seleccionar colores. Se agregarán al mensaje de WhatsApp.';
       document.getElementById('paletaNota').textContent = seleccionados.size > 0 ? `Seleccionados: ${nombres}` : nombres;
     });
-    grid.appendChild(btn);
+    wrap.appendChild(btn);
+    wrap.appendChild(label);
+    grid.appendChild(wrap);
   });
 
   actualizarWA();
