@@ -25,4 +25,4 @@ services:
 
 databases:
   - name: terramia-db
-    plan: starter
+    plan: basic-256mb
