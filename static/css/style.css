@@ -140,7 +140,7 @@ section { padding:130px 0; position:relative }
 .hero-eyebrow::before { content:""; width:40px; height:1px; background:var(--durazno) }
 .hero h1 { font-family:'Dancing Script', cursive; font-size:clamp(40px,6.4vw,93px); line-height:1.15; letter-spacing:.01em; margin-bottom:24px }
 .hero h1 em { font-style:italic; color:var(--terracota-l) }
-.hero h1 .sm { display:block; font-size:.42em; letter-spacing:.04em; color:var(--crema-soft); font-weight:300; margin-top:22px; font-family:'Jost', sans-serif }
+.hero h1 .sm { display:block; font-size:.46em; color:var(--crema-soft); margin-top:22px; font-family:'Dancing Script', cursive; font-style:italic }
 .hero-left > p { font-size:21px; max-width:440px; color:var(--crema-soft); margin-bottom:48px }
 .hero-cta { display:flex; gap:16px; flex-wrap:wrap; align-items:center }
 .hero-cta .btn { font-size:20px; padding:23px 48px; gap:14px }
