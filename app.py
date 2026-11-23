@@ -11,8 +11,12 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'terramia-dev-secret-2024')
     db_url = os.environ.get('DATABASE_URL', 'sqlite:///terramia.db')
-    if db_url.startswith('postgres://'):
-        db_url = db_url.replace('postgres://', 'postgresql+psycopg2://', 1)
+    # Driver explícito: SQLAlchemy 2.1 usa psycopg v3 por defecto con "postgresql://",
+    # y acá está instalado psycopg2.
+    for prefijo in ('postgres://', 'postgresql://'):
+        if db_url.startswith(prefijo):
+            db_url = 'postgresql+psycopg2://' + db_url[len(prefijo):]
+            break
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
