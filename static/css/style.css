@@ -721,3 +721,18 @@ section { padding:130px 0; position:relative }
   .nosotros-values { grid-template-columns:1fr }
   .hero-cta { flex-direction:column; align-items:flex-start }
 }
+
+/* === FRANJA DE FOTOS (carrusel automático bajo el hero) === */
+.franja { position:relative; padding:0; height:clamp(260px, 38vw, 520px); overflow:hidden; background:var(--noche) }
+.franja-track { position:absolute; inset:0 }
+.franja-slide { position:absolute; inset:0; display:grid; gap:8px; opacity:0; visibility:hidden; transition:opacity 1s ease, visibility 0s linear 1s }
+.franja-slide.is-active { opacity:1; visibility:visible; transition:opacity 1s ease, visibility 0s }
+.franja-slide[data-cols="1"] { grid-template-columns:1fr }
+.franja-slide[data-cols="2"] { grid-template-columns:repeat(2, 1fr) }
+.franja-slide[data-cols="3"] { grid-template-columns:repeat(3, 1fr) }
+.franja-slide img { width:100%; height:100%; object-fit:cover; display:block }
+.franja-dots { position:absolute; left:50%; bottom:18px; transform:translateX(-50%); display:flex; gap:10px; z-index:2 }
+.franja-dot { width:10px; height:10px; padding:0; border-radius:50%; border:1px solid rgba(255,255,255,.9); background:rgba(0,0,0,.35); box-shadow:0 0 0 1px rgba(0,0,0,.25); cursor:pointer; transition:background .3s, transform .3s }
+.franja-dot.is-active { background:#fff; transform:scale(1.25) }
+@media (max-width:700px) { .franja-slide { gap:4px } }
+@media (prefers-reduced-motion: reduce) { .franja-slide { transition:none } }

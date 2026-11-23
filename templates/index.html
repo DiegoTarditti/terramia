@@ -32,6 +32,29 @@
   <div class="scroll-cue"><span>Deslizá</span><span class="ln"></span></div>
 </header>
 
+<!-- FRANJA DE FOTOS -->
+<section class="franja" id="galeria" aria-label="Galería de cerámica" aria-roledescription="carrusel">
+  <div class="franja-track">
+    <div class="franja-slide is-active" data-cols="3">
+      <img src="{{ url_for('static', filename='img/portada/tazas-apiladas.webp') }}" alt="Tazas de cerámica apiladas" loading="lazy">
+      <img src="{{ url_for('static', filename='img/portada/jarrones.webp') }}" alt="Jarrones de barro sobre un pedestal" loading="lazy">
+      <img src="{{ url_for('static', filename='img/portada/cuencos.webp') }}" alt="Cuencos de cerámica de distintos colores" loading="lazy">
+    </div>
+    <div class="franja-slide" data-cols="1">
+      <img src="{{ url_for('static', filename='img/portada/torno.webp') }}" alt="Torno de alfarería con herramientas" loading="lazy">
+    </div>
+    <div class="franja-slide" data-cols="2">
+      <img src="{{ url_for('static', filename='img/portada/jarra-taza.webp') }}" alt="Taza y plato de cerámica con luz de ventana" loading="lazy">
+      <img src="{{ url_for('static', filename='img/portada/herramientas.webp') }}" alt="Herramientas de alfarería junto al torno" loading="lazy">
+    </div>
+  </div>
+  <div class="franja-dots" role="tablist" aria-label="Elegir foto">
+    <button type="button" class="franja-dot is-active" role="tab" aria-label="Foto 1"></button>
+    <button type="button" class="franja-dot" role="tab" aria-label="Foto 2"></button>
+    <button type="button" class="franja-dot" role="tab" aria-label="Foto 3"></button>
+  </div>
+</section>
+
 <!-- HISTORIA -->
 <section class="historia" id="historia">
   <div class="wrap">
