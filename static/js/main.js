@@ -66,35 +66,19 @@ document.querySelectorAll('.add-form').forEach(form => {
   });
 });
 
-// Franja de fotos: cambia sola cada 5,5 s, se pausa con el mouse encima o si la pestaña está oculta,
-// y no avanza sola si el usuario prefiere menos movimiento. Los puntos y el deslizar con el dedo la cambian a mano.
+// Fondo del hero: las fotos se desvanecen una a otra cada 6,5 s. Se pausa con la pestaña oculta
+// y no cambia sola si el usuario prefiere menos movimiento.
 (function () {
-  const franja = document.querySelector('.franja');
-  if (!franja) return;
-  const slides = [...franja.querySelectorAll('.franja-slide')];
-  const dots = [...franja.querySelectorAll('.franja-dot')];
-  if (slides.length < 2) return;
+  const slides = [...document.querySelectorAll('.hero-bg-slide')];
+  if (slides.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   let actual = 0, timer = null;
-  const ir = n => {
-    actual = (n + slides.length) % slides.length;
-    slides.forEach((s, i) => s.classList.toggle('is-active', i === actual));
-    dots.forEach((d, i) => d.classList.toggle('is-active', i === actual));
+  const siguiente = () => {
+    slides[actual].classList.remove('is-active');
+    actual = (actual + 1) % slides.length;
+    slides[actual].classList.add('is-active');
   };
-  const parar = () => { clearInterval(timer); timer = null };
-  const arrancar = () => {
-    if (timer || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    timer = setInterval(() => ir(actual + 1), 5500);
-  };
-  dots.forEach((d, i) => d.addEventListener('click', () => { ir(i); parar(); arrancar(); }));
-  franja.addEventListener('mouseenter', parar);
-  franja.addEventListener('mouseleave', arrancar);
+  const arrancar = () => { if (!timer) timer = setInterval(siguiente, 6500); };
+  const parar = () => { clearInterval(timer); timer = null; };
   document.addEventListener('visibilitychange', () => document.hidden ? parar() : arrancar());
-  let x0 = null;
-  franja.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
-  franja.addEventListener('touchend', e => {
-    if (x0 === null) return;
-    const dx = e.changedTouches[0].clientX - x0; x0 = null;
-    if (Math.abs(dx) > 40) { ir(actual + (dx < 0 ? 1 : -1)); parar(); arrancar(); }
-  }, { passive: true });
   arrancar();
 })();

@@ -722,17 +722,13 @@ section { padding:130px 0; position:relative }
   .hero-cta { flex-direction:column; align-items:flex-start }
 }
 
-/* === FRANJA DE FOTOS (carrusel automático bajo el hero) === */
-.franja { position:relative; padding:0; height:clamp(260px, 38vw, 520px); overflow:hidden; background:var(--noche) }
-.franja-track { position:absolute; inset:0 }
-.franja-slide { position:absolute; inset:0; display:grid; gap:8px; opacity:0; visibility:hidden; transition:opacity 1s ease, visibility 0s linear 1s }
-.franja-slide.is-active { opacity:1; visibility:visible; transition:opacity 1s ease, visibility 0s }
-.franja-slide[data-cols="1"] { grid-template-columns:1fr }
-.franja-slide[data-cols="2"] { grid-template-columns:repeat(2, 1fr) }
-.franja-slide[data-cols="3"] { grid-template-columns:repeat(3, 1fr) }
-.franja-slide img { width:100%; height:100%; object-fit:cover; display:block }
-.franja-dots { position:absolute; left:50%; bottom:18px; transform:translateX(-50%); display:flex; gap:10px; z-index:2 }
-.franja-dot { width:10px; height:10px; padding:0; border-radius:50%; border:1px solid rgba(255,255,255,.9); background:rgba(0,0,0,.35); box-shadow:0 0 0 1px rgba(0,0,0,.25); cursor:pointer; transition:background .3s, transform .3s }
-.franja-dot.is-active { background:#fff; transform:scale(1.25) }
-@media (max-width:700px) { .franja-slide { gap:4px } }
-@media (prefers-reduced-motion: reduce) { .franja-slide { transition:none } }
+/* === FONDO ROTATIVO DEL HERO (fotos que se desvanecen) === */
+.hero-bg { position:absolute; inset:0; z-index:0; overflow:hidden; background:var(--noche) }
+.hero-bg-slide { position:absolute; inset:0; display:block; opacity:0; transition:opacity 1.8s ease }
+.hero-bg-slide.is-active { opacity:1 }
+.hero-bg-slide img { width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.03); transition:transform 9s ease-out }
+.hero-bg-slide.is-active img { transform:scale(1.1) }
+.hero-bg-veil { position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(90deg, rgba(36,29,24,.92) 0%, rgba(36,29,24,.74) 45%, rgba(36,29,24,.42) 100%), linear-gradient(180deg, rgba(36,29,24,.55) 0%, rgba(36,29,24,0) 30%, rgba(36,29,24,.7) 100%) }
+.hero-inner { position:relative; z-index:2 }
+@media (max-width:900px) { .hero-bg-veil { background:linear-gradient(180deg, rgba(36,29,24,.72) 0%, rgba(36,29,24,.62) 60%, rgba(36,29,24,.85) 100%) } }
+@media (prefers-reduced-motion: reduce) { .hero-bg-slide { transition:none } .hero-bg-slide img, .hero-bg-slide.is-active img { transform:none; transition:none } }

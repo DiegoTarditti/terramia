@@ -1,0 +1,10 @@
+Fotos de fondo de la portada (Unsplash: uso comercial libre, atribución no obligatoria).
+Se guardan los autores por si se quiere acreditarlos. Originales en static/home (no se publican).
+
+manos-*.webp       - Raymond Petrik  - https://unsplash.com/photos/Gc6-JR_23oQ
+tazas-*.webp       - Diana Light     - https://unsplash.com/photos/u_jt9A7FADk
+jarra-taza-*.webp  - Jocelyn Morales - https://unsplash.com/photos/85u5oGSBJ1s
+ollas-*.webp       - Jennifer Burk   - https://unsplash.com/photos/CHG8eMpD1Aw
+cuencos-*.webp     - Khloe Arledge   - https://unsplash.com/photos/ypi0l7vP0Vw
+
+-d = recorte horizontal 1920x1080 (escritorio); -m = recorte vertical 800x1300 (celular).
