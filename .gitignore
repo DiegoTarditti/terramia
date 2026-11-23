@@ -8,4 +8,4 @@ instance/
 static/uploads/
 server.log
 server_err.log
-fonts/
+/fonts/
