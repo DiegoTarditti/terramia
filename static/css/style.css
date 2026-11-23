@@ -317,12 +317,7 @@ section { padding:130px 0; position:relative }
 /* === FOOTER === */
 .site-footer { background:#1C1611; color:var(--crema-soft); padding:80px 0 36px }
 .footer-inner { display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:44px; margin-bottom:56px }
-.footer-wordmark { display:flex; align-items:center; gap:14px; margin-bottom:18px }
-.footer-symbol-crop { width:96px; height:108px; overflow:hidden; flex-shrink:0; -webkit-mask-image:linear-gradient(to bottom, black 72%, transparent 90%); mask-image:linear-gradient(to bottom, black 72%, transparent 90%) }
-.footer-symbol-img { width:300px; height:auto; margin-left:-102px; margin-top:-4px; filter:url('#rmwh') }
-.footer-wm-text { display:flex; flex-direction:column; align-items:center }
-.fw-name { font-family:'Dancing Script', cursive; font-size:30px; color:#fff; line-height:1; display:block }
-.fw-sub { font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:#D17551; display:block; margin-top:5px }
+.footer-logo-img { height:96px; width:auto; max-width:100%; display:block; object-fit:contain; margin-bottom:18px }
 .footer-brand .fb { font-family:'Dancing Script', cursive; font-size:34px; color:var(--crema) }
 .footer-brand .ftg { font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--durazno); margin:4px 0 16px }
 .footer-brand p { font-size:17px; max-width:280px; line-height:1.7 }

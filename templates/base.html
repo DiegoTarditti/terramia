@@ -58,15 +58,7 @@
   <div class="wrap">
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="footer-wordmark">
-          <div class="footer-symbol-crop">
-            <img src="{{ url_for('static', filename='img/logo-vertical.png') }}" alt="" class="footer-symbol-img">
-          </div>
-          <div class="footer-wm-text">
-            <span class="fw-name">Terramia</span>
-            <span class="fw-sub">Cerámica Artesanal</span>
-          </div>
-        </div>
+        <img src="{{ url_for('static', filename='img/logo-principal.png') }}" alt="Terramia · Cerámica Artesanal" class="footer-logo-img">
         <p>Piezas de barro hechas a mano, con alma y color de la tierra.<br><span style="white-space:nowrap">Santa Fe, Argentina.</span></p>
       </div>
       <div class="footer-col">
@@ -126,13 +118,6 @@
   </div>
 </footer>
 
-<svg width="0" height="0" style="position:absolute;overflow:hidden">
-  <defs>
-    <filter id="rmwh" color-interpolation-filters="sRGB">
-      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  -1 -1 -1 3 0"/>
-    </filter>
-  </defs>
-</svg>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
